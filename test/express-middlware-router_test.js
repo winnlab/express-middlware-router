@@ -1,5 +1,6 @@
 var	should = require('should'),
 	async = require('async'),
+	crypto = require('crypto'),
 	_ = require('underscore'),
 	
 	expressMiddlwareRouter = require('../lib/express-middlware-router.js'),
@@ -27,6 +28,36 @@ describe('expressMiddlwareRouter should have #add_route as function.', function(
 	it('#add_route should have be a function', function() {
 		expressMiddlwareRouter.add_route.should.be.a.Function;
 	});
+	
+	it('#add_route should add a route to database', function() {
+		var	r1 = {
+			type: 'get',
+			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
+			controller: 'test',
+			name: 'test'
+		}, r2 = {
+			type: 'get',
+			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
+			controller: 'test',
+			name: 'test'
+		};
+		
+		async.parallel({
+			first: function(next) {
+				expressMiddlwareRouter.add_route(r1, next);
+			},
+			second: function(next) {
+				route.create(r2, next);
+			}
+		}, function(err, results) {
+			var	first = results.first,
+				second = results.second;
+			
+			first.type.should.equal(second.type);
+			first.controller.should.equal(second.controller);
+			first.name.should.equal(second.name);
+		});
+	});
 });
 
 describe('expressMiddlwareRouter should have #get_route as function.', function() {
@@ -36,6 +67,10 @@ describe('expressMiddlwareRouter should have #get_route as function.', function(
 	
 	it('#get_route should have be a function', function() {
 		expressMiddlwareRouter.get_route.should.be.a.Function;
+	});
+	
+	it('#get_route should get a route from database', function() {
+		
 	});
 });
 
@@ -68,6 +103,7 @@ describe('expressMiddlwareRouter should have #get_route_list as function.', func
 			},
 			second: function(next) {
 				var	options = {
+					lean: true,
 					limit: limit,
 					skip: offset
 				}
@@ -75,9 +111,13 @@ describe('expressMiddlwareRouter should have #get_route_list as function.', func
 			}
 		}, function(err, results) {
 			var	first = results.first,
-				second = results.second;
+				second = results.second,
+				i;
 			
-			_.difference(first, second).length.should.equal(0);
+			first.length.should.equal(second.length);
+			for(i = first.length; i--;) {
+				//_.difference(first[i], second[i]).length.should.equal(0);
+			}
 		});
 	});
 });
