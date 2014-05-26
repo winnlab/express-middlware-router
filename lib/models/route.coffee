@@ -8,7 +8,6 @@ schema = new mongoose.Schema
 	type:
 		type: String
 		required: true
-		unique: false 
 	path:
 		type: String
 		required: true
@@ -16,11 +15,9 @@ schema = new mongoose.Schema
 	controller:
 		type: String
 		required: true
-		unique: false 
 	name:
 		type: String
 		required: true
-		unique: true 
 ,
 	collection: 'idk'
 
