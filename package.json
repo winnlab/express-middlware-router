@@ -1,14 +1,33 @@
 {
-	"name": "express-router",
-	"description": "express-router",
-	"version": "0.0.1",
-	"private": true,
-	"dependencies": {
-		"express": "3.x",
-		"jade": "1.1.5",
-		"async": "0.2.10",
-		"mongoose": "3.8.11",
-		"mocha": "~1.17.1",
-		"should": "~3.1.2"
-	}
+  "name": "express-middlware-router",
+  "version": "0.0.0",
+  "main": "lib/express-middlware-router.js",
+  "description": "The best module ever.",
+  "homepage": "winnlab.com",
+  "bugs": "https://github.com/HydraOrc/express-middlware-router/issues",
+  "author": {
+    "name": "HydraOrc",
+    "email": "hydra0@bigmir.net",
+    "url": "winnlab.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HydraOrc/express-middlware-router"
+  },
+  "license": "MIT",
+  "files": [
+    "lib"
+  ],
+  "keywords": [],
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "load-grunt-tasks": "^0.4.0",
+    "time-grunt": "^0.3.1",
+    "jshint-stylish": "^0.2.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  }
 }
