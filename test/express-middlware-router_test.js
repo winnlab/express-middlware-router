@@ -1,6 +1,8 @@
 var	should = require('should'),
+	async = require('async'),
 	
-	expressMiddlwareRouter = require('../lib/express-middlware-router.js');
+	expressMiddlwareRouter = require('../lib/express-middlware-router.js'),
+	route = require('../lib/models/route');
 
 describe('expressMiddlwareRouter should have #awesome as function.', function() {
 	it('should have #awesome', function() {
@@ -55,8 +57,18 @@ describe('expressMiddlwareRouter should have #get_route_list as function.', func
 		expressMiddlwareRouter.get_route_list.should.be.a.Function;
 	});
 	
-	it('#get_route_list should return an array', function() {
-		expressMiddlwareRouter.get_route_list().should.be.an.Array;
+	it('#get_route_list should get an array of routes from database', function() {
+		async.waterfall([
+			function(next) {
+				route.find(next);
+			},
+			function(routes) {
+				routes.should.be.an.Array;
+			}
+		],
+		function (err) {
+			console.log(err);
+		});
 	});
 });
 
