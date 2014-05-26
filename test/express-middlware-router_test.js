@@ -73,7 +73,38 @@ describe('expressMiddlwareRouter should have #get_route as function.', function(
 	});
 	
 	it('#get_route should get a route from database', function() {
+		var data = {
+			type: 'get',
+			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
+			controller: 'test',
+			name: 'test'
+		};
 		
+		async.waterfall([
+			function(next) {
+				route.create(data, next);
+			},
+			function(new_route) {
+				async.parallel({
+					first: function(next) {
+						expressMiddlwareRouter.get_route(new_route._id, next);
+					},
+					second: function(next) {
+						route.findById(new_route._id, next);
+					}
+				}, function(err, results) {
+					var	first = results.first,
+						second = results.second;
+					
+					JSON.stringify(first).should.equal(JSON.stringify(second));
+					
+					new_route.remove();
+				});
+			}
+		],
+		function(err) {
+			console.log(err);
+		});
 	});
 });
 
@@ -118,6 +149,7 @@ describe('expressMiddlwareRouter should have #get_route_list as function.', func
 				i;
 			
 			first.length.should.equal(second.length);
+			
 			for(i = first.length; i--;) {
 				JSON.stringify(first[i]).should.equal(JSON.stringify(second[i]));
 			}
