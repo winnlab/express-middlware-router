@@ -116,6 +116,33 @@ describe('expressMiddlwareRouter should have #delete_route as function.', functi
 	it('#delete_route should have be a function', function() {
 		expressMiddlwareRouter.delete_route.should.be.a.Function;
 	});
+	
+	it('#delete_route should delete a route from database', function() {
+		var data = {
+			type: 'get',
+			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
+			controller: 'test',
+			name: 'test'
+		};
+		
+		async.waterfall([
+			function(next) {
+				route.create(data, next);
+			},
+			function(new_route, next) {
+				expressMiddlwareRouter.delete_route(new_route._id, next);
+			},
+			function(deleted_route, next) {
+				route.findById(deleted_route._id, next);
+			},
+			function(nonexistent_route) {
+				(nonexistent_route === null).should.be.true;
+			}
+		],
+		function(err) {
+			console.log(err);
+		});
+	});
 });
 
 describe('expressMiddlwareRouter should have #get_route_list as function.', function() {
