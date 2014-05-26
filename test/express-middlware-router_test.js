@@ -56,6 +56,9 @@ describe('expressMiddlwareRouter should have #add_route as function.', function(
 			first.type.should.equal(second.type);
 			first.controller.should.equal(second.controller);
 			first.name.should.equal(second.name);
+			
+			first.remove();
+			second.remove();
 		});
 	});
 });
