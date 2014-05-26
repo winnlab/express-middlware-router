@@ -20,16 +20,16 @@ describe('expressMiddlwareRouter should have #awesome as function.', function() 
 	});
 });
 
-describe('expressMiddlwareRouter should have #add_route as function.', function() {
-	it('should have #add_route', function() {
-		expressMiddlwareRouter.should.be.have.property('add_route');
+describe('expressMiddlwareRouter should have #addRoute as function.', function() {
+	it('should have #addRoute', function() {
+		expressMiddlwareRouter.should.be.have.property('addRoute');
 	});
 	
-	it('#add_route should have be a function', function() {
-		expressMiddlwareRouter.add_route.should.be.a.Function;
+	it('#addRoute should have be a function', function() {
+		expressMiddlwareRouter.addRoute.should.be.a.Function;
 	});
 	
-	it('#add_route should add a route to database', function() {
+	it('#addRoute should add a route to database', function() {
 		var	r1 = {
 			type: 'get',
 			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
@@ -44,7 +44,7 @@ describe('expressMiddlwareRouter should have #add_route as function.', function(
 		
 		async.parallel({
 			first: function(next) {
-				expressMiddlwareRouter.add_route(r1, next);
+				expressMiddlwareRouter.addRoute(r1, next);
 			},
 			second: function(next) {
 				route.create(r2, next);
@@ -63,16 +63,16 @@ describe('expressMiddlwareRouter should have #add_route as function.', function(
 	});
 });
 
-describe('expressMiddlwareRouter should have #get_route as function.', function() {
-	it('should have #get_route', function() {
-		expressMiddlwareRouter.should.be.have.property('get_route');
+describe('expressMiddlwareRouter should have #getRoute as function.', function() {
+	it('should have #getRoute', function() {
+		expressMiddlwareRouter.should.be.have.property('getRoute');
 	});
 	
-	it('#get_route should have be a function', function() {
-		expressMiddlwareRouter.get_route.should.be.a.Function;
+	it('#getRoute should have be a function', function() {
+		expressMiddlwareRouter.getRoute.should.be.a.Function;
 	});
 	
-	it('#get_route should get a route from database', function() {
+	it('#getRoute should get a route from database', function() {
 		var data = {
 			type: 'get',
 			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
@@ -87,7 +87,7 @@ describe('expressMiddlwareRouter should have #get_route as function.', function(
 			function(new_route) {
 				async.parallel({
 					first: function(next) {
-						expressMiddlwareRouter.get_route(new_route._id, next);
+						expressMiddlwareRouter.getRoute(new_route._id, next);
 					},
 					second: function(next) {
 						route.findById(new_route._id, next);
@@ -108,29 +108,29 @@ describe('expressMiddlwareRouter should have #get_route as function.', function(
 	});
 });
 
-describe('expressMiddlwareRouter should have #delete_route as function.', function() {
-	it('should have #delete_route', function() {
-		expressMiddlwareRouter.should.be.have.property('delete_route');
+describe('expressMiddlwareRouter should have #deleteRoute as function.', function() {
+	it('should have #deleteRoute', function() {
+		expressMiddlwareRouter.should.be.have.property('deleteRoute');
 	});
 	
-	it('#delete_route should have be a function', function() {
-		expressMiddlwareRouter.delete_route.should.be.a.Function;
+	it('#deleteRoute should have be a function', function() {
+		expressMiddlwareRouter.deleteRoute.should.be.a.Function;
 	});
 	
-	it('#delete_route should delete a route from database', function() {
-		var data = {
-			type: 'get',
-			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
-			controller: 'test',
-			name: 'test'
-		};
-		
+	it('#deleteRoute should delete a route from database', function() {
 		async.waterfall([
 			function(next) {
+				var data = {
+					type: 'get',
+					path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
+					controller: 'test',
+					name: 'test'
+				};
+				
 				route.create(data, next);
 			},
 			function(new_route, next) {
-				expressMiddlwareRouter.delete_route(new_route._id, next);
+				expressMiddlwareRouter.deleteRoute(new_route._id, next);
 			},
 			function(deleted_route, next) {
 				route.findById(deleted_route._id, next);
@@ -145,22 +145,22 @@ describe('expressMiddlwareRouter should have #delete_route as function.', functi
 	});
 });
 
-describe('expressMiddlwareRouter should have #get_route_list as function.', function() {
-	it('should have #get_route_list', function() {
-		expressMiddlwareRouter.should.be.have.property('get_route_list');
+describe('expressMiddlwareRouter should have #getRouteList as function.', function() {
+	it('should have #getRouteList', function() {
+		expressMiddlwareRouter.should.be.have.property('getRouteList');
 	});
 	
-	it('#get_route_list should have be a function', function() {
-		expressMiddlwareRouter.get_route_list.should.be.a.Function;
+	it('#getRouteList should have be a function', function() {
+		expressMiddlwareRouter.getRouteList.should.be.a.Function;
 	});
 	
-	it('#get_route_list should get an array of routes from database', function() {
+	it('#getRouteList should get an array of routes from database', function() {
 		var limit = 5,
 			offset = 1;
 		
 		async.parallel({
 			first: function(next) {
-				expressMiddlwareRouter.get_route_list(limit, offset, next);
+				expressMiddlwareRouter.getRouteList(limit, offset, next);
 			},
 			second: function(next) {
 				var	options = {
@@ -184,22 +184,56 @@ describe('expressMiddlwareRouter should have #get_route_list as function.', func
 	});
 });
 
-describe('expressMiddlwareRouter should have #update_route as function.', function() {
-	it('should have #update_route', function() {
-		expressMiddlwareRouter.should.be.have.property('update_route');
+describe('expressMiddlwareRouter should have #updateRoute as function.', function() {
+	it('should have #updateRoute', function() {
+		expressMiddlwareRouter.should.be.have.property('updateRoute');
 	});
 	
-	it('#update_route should have be a function', function() {
-		expressMiddlwareRouter.update_route.should.be.a.Function;
+	it('#updateRoute should have be a function', function() {
+		expressMiddlwareRouter.updateRoute.should.be.a.Function;
+	});
+	
+	it('#updateRoute should update a route from database', function() {
+		var data = {
+			type: 'get',
+			path: crypto.createHash('md5').update(Math.random().toString()).digest('hex'),
+			controller: 'test',
+			name: 'test'
+		},
+		new_data = {
+			type: 'post',
+			controller: 'new_test',
+			name: 'new_test'
+		},
+		updated_route;
+		
+		async.waterfall([
+			function(next) {
+				route.create(data, next);
+			},
+			function(new_route, next) {
+				updated_route = new_route;
+				expressMiddlwareRouter.updateRoute(new_route._id, new_data, next);
+			}, function(numberAffected, raw) {
+				numberAffected.should.equal(1);
+				raw.updatedExisting.should.equal(true);
+				(raw.err === null).should.be.true;
+				
+				updated_route.remove();
+			}
+		],
+		function(err) {
+			console.log(err);
+		});
 	});
 });
 
-describe('expressMiddlwareRouter should have #init_route as function.', function() {
-	it('should have #init_route', function() {
-		expressMiddlwareRouter.should.be.have.property('init_route');
+describe('expressMiddlwareRouter should have #initRoute as function.', function() {
+	it('should have #initRoute', function() {
+		expressMiddlwareRouter.should.be.have.property('initRoute');
 	});
 	
-	it('#init_route should have be a function', function() {
-		expressMiddlwareRouter.init_route.should.be.a.Function;
+	it('#initRoute should have be a function', function() {
+		expressMiddlwareRouter.initRoute.should.be.a.Function;
 	});
 });
