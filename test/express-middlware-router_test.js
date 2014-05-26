@@ -119,7 +119,7 @@ describe('expressMiddlwareRouter should have #get_route_list as function.', func
 			
 			first.length.should.equal(second.length);
 			for(i = first.length; i--;) {
-				//_.difference(first[i], second[i]).length.should.equal(0);
+				JSON.stringify(first[i]).should.equal(JSON.stringify(second[i]));
 			}
 		});
 	});
