@@ -2,7 +2,7 @@ mongoose = require 'mongoose'
 ObjectId = mongoose.Schema.Types.ObjectId
 Mixed = mongoose.Schema.Types.Mixed
 
-database = require '../../init/database'
+mongoose.connect 'localhost:27017/idk'
 
 schema = new mongoose.Schema 
 	type:
