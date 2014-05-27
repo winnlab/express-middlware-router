@@ -167,7 +167,8 @@ describe('expressMiddlwareRouter should have #getList as function.', function() 
 					lean: true,
 					limit: limit,
 					skip: offset
-				}
+				};
+				
 				Route.find({}, options, next);
 			}
 		}, function(err, results) {
@@ -228,12 +229,29 @@ describe('expressMiddlwareRouter should have #update as function.', function() {
 	});
 });
 
-describe('expressMiddlwareRouter should have #init as function.', function() {
-	it('should have #init', function() {
-		expressMiddlwareRouter.should.be.have.property('init');
+describe('expressMiddlwareRouter should have #initialize as function.', function() {
+	it('should have #initialize', function() {
+		expressMiddlwareRouter.should.be.have.property('initialize');
 	});
 	
-	it('#init should have be a function', function() {
-		expressMiddlwareRouter.init.should.be.a.Function;
+	it('#initialize should have be a function', function() {
+		expressMiddlwareRouter.initialize.should.be.a.Function;
+	});
+	
+	it('#initialize should initializeiate routes from database', function() {
+		var routes;
+		
+		async.waterfall([
+			function(next) {
+				Route.find({}, next);
+			},
+			function(result) {
+				console.log(1);
+				console.log(result);
+			}
+		],
+		function(err) {
+			console.log(err);
+		});
 	});
 });
