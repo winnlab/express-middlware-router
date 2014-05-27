@@ -1,6 +1,7 @@
 var	should = require('should'),
 	async = require('async'),
 	crypto = require('crypto'),
+	express = require('express'),
 	
 	expressMiddlwareRouter = require('../lib/express-middlware-router.js'),
 	Route = require('../lib/models/route');
@@ -234,16 +235,55 @@ describe('expressMiddlwareRouter should have #initialize as function.', function
 	});
 	
 	it('#initialize should initialize routes from database', function(done) {
-		async.waterfall([
-			function(next) {
-				Route.find({}, next);
+		var	app = express(),
+			valid_routes = {},
+			i;
+		
+		async.parallel({
+			first: function(next) {
+				expressMiddlwareRouter.initialize(app, '', next);
 			},
-			function(result) {
-				done();
+			second: function(next) {
+				async.waterfall([
+					function(next2) {
+						Route.find({}, next2);
+					},
+					function(result) {
+						var	route,
+							controller,
+							name;
+						
+						for(i = result.length; i--;) {
+							route = result[i];
+							controller = global[route.controller];
+							
+							if(typeof(controller) != 'undefined' && controller) {
+								name = controller[route.name];
+								
+								if(typeof(name) != 'undefined' && name) {
+									app[route.type](route.path, name);
+									
+									if(typeof(valid_routes[route.type]) == 'undefined') {
+										valid_routes[route.type] = [];
+									}
+									valid_routes[route.type].push(route)
+								}
+							}
+						}
+						
+						next(false, valid_routes);
+					}
+				],
+				function(err) {
+					console.log(err);
+				});
 			}
-		],
-		function(err) {
-			console.log(err);
+		}, function(err, results) {
+			var	first = results.first,
+				second = results.second;
+			
+			JSON.stringify(first).should.equal(JSON.stringify(second));
+			
 			done();
 		});
 	});
