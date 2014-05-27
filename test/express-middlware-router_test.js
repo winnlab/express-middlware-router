@@ -230,7 +230,7 @@ describe('expressMiddlwareRouter should have #update as function.', function() {
 });
 
 describe('expressMiddlwareRouter should have #initialize as function.', function() {
-	it('should have #initialize', function() {
+	it('should have #update', function() {
 		expressMiddlwareRouter.should.be.have.property('initialize');
 	});
 	
@@ -238,16 +238,14 @@ describe('expressMiddlwareRouter should have #initialize as function.', function
 		expressMiddlwareRouter.initialize.should.be.a.Function;
 	});
 	
-	it('#initialize should initializeiate routes from database', function() {
-		var routes;
-		
+	it('#initialize should initialize routes from database', function() {
 		async.waterfall([
 			function(next) {
 				Route.find({}, next);
 			},
-			function(result) {
+			function(tr) {
 				console.log(1);
-				console.log(result);
+				console.log(tr);
 			}
 		],
 		function(err) {
