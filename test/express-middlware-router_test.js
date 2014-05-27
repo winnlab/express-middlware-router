@@ -4,7 +4,7 @@ var	should = require('should'),
 	_ = require('underscore'),
 	
 	expressMiddlwareRouter = require('../lib/express-middlware-router.js'),
-	route = require('../lib/models/route');
+	Route = require('../lib/models/route');
 
 describe('expressMiddlwareRouter should have #awesome as function.', function() {
 	it('should have #awesome', function() {
@@ -47,7 +47,7 @@ describe('expressMiddlwareRouter should have #add as function.', function() {
 				expressMiddlwareRouter.add(r1, next);
 			},
 			second: function(next) {
-				route.create(r2, next);
+				Route.create(r2, next);
 			}
 		}, function(err, results) {
 			var	first = results.first,
@@ -82,15 +82,15 @@ describe('expressMiddlwareRouter should have #get as function.', function() {
 		
 		async.waterfall([
 			function(next) {
-				route.create(data, next);
+				Route.create(data, next);
 			},
-			function(new_route) {
+			function(route) {
 				async.parallel({
 					first: function(next) {
-						expressMiddlwareRouter.get(new_route._id, next);
+						expressMiddlwareRouter.get(route._id, next);
 					},
 					second: function(next) {
-						route.findById(new_route._id, next);
+						Route.findById(route._id, next);
 					}
 				}, function(err, results) {
 					var	first = results.first,
@@ -98,7 +98,7 @@ describe('expressMiddlwareRouter should have #get as function.', function() {
 					
 					JSON.stringify(first).should.equal(JSON.stringify(second));
 					
-					new_route.remove();
+					route.remove();
 				});
 			}
 		],
@@ -127,13 +127,13 @@ describe('expressMiddlwareRouter should have #remove as function.', function() {
 					name: 'test'
 				};
 				
-				route.create(data, next);
+				Route.create(data, next);
 			},
-			function(new_route, next) {
-				expressMiddlwareRouter.remove(new_route._id, next);
+			function(route, next) {
+				expressMiddlwareRouter.remove(route._id, next);
 			},
 			function(deleted_route, next) {
-				route.findById(deleted_route._id, next);
+				Route.findById(deleted_route._id, next);
 			},
 			function(nonexistent_route) {
 				(nonexistent_route === null).should.be.true;
@@ -168,7 +168,7 @@ describe('expressMiddlwareRouter should have #getList as function.', function() 
 					limit: limit,
 					skip: offset
 				}
-				route.find({}, options, next);
+				Route.find({}, options, next);
 			}
 		}, function(err, results) {
 			var	first = results.first,
@@ -205,21 +205,21 @@ describe('expressMiddlwareRouter should have #update as function.', function() {
 			controller: 'new_test',
 			name: 'new_test'
 		},
-		updated_route;
+		route;
 		
 		async.waterfall([
 			function(next) {
-				route.create(data, next);
+				Route.create(data, next);
 			},
 			function(new_route, next) {
-				updated_route = new_route;
+				route = new_route;
 				expressMiddlwareRouter.update(new_route._id, new_data, next);
 			}, function(numberAffected, raw) {
 				numberAffected.should.equal(1);
 				raw.updatedExisting.should.equal(true);
 				(raw.err === null).should.be.true;
 				
-				updated_route.remove();
+				route.remove();
 			}
 		],
 		function(err) {
