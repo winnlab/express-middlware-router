@@ -2,6 +2,7 @@ var	should = require('should'),
 	async = require('async'),
 	crypto = require('crypto'),
 	express = require('express'),
+	path = require('path'),
 	
 	expressMiddlwareRouter = require('../lib/express-middlware-router.js'),
 	Route = require('../lib/models/route');
@@ -236,12 +237,11 @@ describe('expressMiddlwareRouter should have #initialize as function.', function
 	
 	it('#initialize should initialize routes from database', function(done) {
 		var	app = express(),
-			valid_routes = {},
-			i;
+			controllers_path = path.join(__dirname, 'controllers');
 		
 		async.parallel({
 			first: function(next) {
-				expressMiddlwareRouter.initialize(app, '', next);
+				expressMiddlwareRouter.initialize(app, controllers_path, next);
 			},
 			second: function(next) {
 				async.waterfall([
@@ -249,13 +249,16 @@ describe('expressMiddlwareRouter should have #initialize as function.', function
 						Route.find({}, next2);
 					},
 					function(result) {
-						var	route,
+						var	valid_routes = {},
+							route,
 							controller,
-							name;
+							name,
+							i;
 						
 						for(i = result.length; i--;) {
 							route = result[i];
-							controller = global[route.controller];
+							
+							controller = require(path.join(controllers_path, route.controller));
 							
 							if(typeof(controller) != 'undefined' && controller) {
 								name = controller[route.name];
